@@ -114,7 +114,9 @@ export default function PostsList() {
             flexDirection="column"
           >
             <VStack align="start" spacing={1} p={4}>
-              <Heading size="xl">{post.title}</Heading>
+              <Heading size="xl" color={"#86a157"}>
+                {post.title}
+              </Heading>
               <Badge colorScheme="blue" size={{ base: "md", md: "lg" }}>
                 By {post.author}
               </Badge>
@@ -151,6 +153,7 @@ export default function PostsList() {
                   <Button
                     variant="link"
                     size="sm"
+                    color={"#bcf553"}
                     colorScheme="teal"
                     onClick={() => toggleExpanded(post.id)}
                   >

@@ -1,3 +1,4 @@
+import AddNewPost from "@/components/posts/AddNewPost";
 import PostsList from "@/components/posts/PostsList";
 import {
   VStack,
@@ -7,6 +8,7 @@ import {
   Float,
   Circle,
   Box,
+  IconButton,
 } from "@chakra-ui/react";
 
 const Home = () => {
@@ -33,6 +35,17 @@ const Home = () => {
           <PostsList />
         </Stack>
       </VStack>
+
+      <Box
+        position="fixed"
+        bottom="10"
+        right="10"
+        shadow={"2xl"}
+        borderRadius={"full"}
+        zIndex={1000}
+      >
+        <AddNewPost />
+      </Box>
     </>
   );
 };

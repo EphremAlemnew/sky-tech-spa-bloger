@@ -22,12 +22,20 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 const NavBbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onToggle } = useDisclosure();
   const bg = colorMode === "light" ? "white" : "gray.800";
   const textColor = colorMode === "light" ? "gray.800" : "white";
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
   return (
     <HStack
       px={4}
@@ -37,8 +45,9 @@ const NavBbar = () => {
       zIndex={1000}
       bg={bg}
       color={textColor}
-      h={"20"}
+      h={"16"}
       justifyContent={"space-between"}
+      shadow={"md"}
     >
       {/* Logo or App Name */}
       <Link href="/" textDecoration={"none"} variant={"plain"}>
@@ -46,7 +55,7 @@ const NavBbar = () => {
           SPA
         </Text>
         <Text fontSize="2xl" color={"#86a157"} fontWeight={"lighter"}>
-          Bloger
+          Blogger
         </Text>
       </Link>
       <Spacer />
@@ -55,13 +64,13 @@ const NavBbar = () => {
       <Spacer />
       <HStack display={{ base: "none", md: "flex" }}>
         <Button
-          variant={"plain"}
-          onClick={toggleColorMode}
-          rounded={"md"}
-          bg={"#bcf553"}
-          color={"gray.800"}
-          fontWeight={"bold"}
-          px={"8"}
+          onClick={handleLogout}
+          variant="plain"
+          rounded="md"
+          bg="#bcf553"
+          color="gray.800"
+          fontWeight="bold"
+          px="8"
         >
           Log out
         </Button>
@@ -82,14 +91,15 @@ const NavBbar = () => {
           </DrawerHeader>
           <DrawerBody>
             <Box>
-              <VStack spacing={4} w={"full"}>
+              <VStack justifyContent={"flex-start"} spacing={4} w={"full"}>
                 <Button
-                  variant={"plain"}
-                  onClick={toggleColorMode}
-                  rounded={"md"}
-                  bg={"#bcf553"}
-                  fontWeight={"bold"}
-                  px={"8"}
+                  onClick={handleLogout}
+                  variant="plain"
+                  rounded="md"
+                  bg="#bcf553"
+                  color="gray.800"
+                  fontWeight="bold"
+                  px="8"
                 >
                   Log out
                 </Button>

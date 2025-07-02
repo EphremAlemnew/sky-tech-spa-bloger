@@ -12,28 +12,29 @@ import {
 } from "@chakra-ui/react";
 
 import { Checkbox } from "../ui/checkbox";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toaster } from "../ui/toaster";
 import { useColorMode } from "../ui/color-mode";
 import { useState } from "react";
 import { login } from "@/api/AuthApi";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useAuth } from "@/hooks/useAuth";
 
 const LoginPage = () => {
   const { colorMode } = useColorMode();
+  const { login: loginUser } = useAuth(); // from your useAuth hook
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const bg = colorMode === "light" ? "white" : "gray.900";
   const imageSrc = colorMode === "light" ? "light_logo.png" : "light_logo.png";
 
-  // ✅ Redirect if already logged in
-  const token = localStorage.getItem("token");
-  if (token) return <Navigate to="/" />;
-
   const handleLogin = async () => {
-    if (!userName || !password) {
+    if (!email || !password) {
       toaster.create({
         title: `Please fill all fields`,
         type: "info",
@@ -42,42 +43,41 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await login(userName, password);
-      localStorage.setItem("token", response.token);
+      setLoading(true);
+      const data = await login(email, password);
+      await loginUser(data.access_token); // Store token in cookie & update user
       toaster.create({
-        title: `You have successfully logged in!`,
+        title: `Login successful`,
         type: "success",
       });
-      window.location.href = "/";
-    } catch (error) {
+      navigate("/"); // Go to home/dashboard
+    } catch (err) {
       toaster.create({
-        title: `Login failed!`,
+        title: err.message || `Invalid credentials`,
         type: "error",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ Handle enter key
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleLogin();
-    }
+    if (e.key === "Enter") handleLogin();
   };
 
   return (
     <Flex
-      color={"#fbae2f"}
       minHeight="100vh"
       alignItems="center"
       justifyContent="center"
-      w={"full"}
+      w="full"
       bg={bg}
     >
       <Stack
         direction={{ base: "column", md: "row" }}
         p={8}
         borderRadius="lg"
-        boxShadow={"2xl"}
+        boxShadow="2xl"
         alignItems="center"
         maxW="800px"
         w="90%"
@@ -90,18 +90,18 @@ const LoginPage = () => {
             borderRadius="lg"
             w={{ base: "1/3", md: "full" }}
             h="auto"
-            mx={"auto"}
+            mx="auto"
           />
         </Box>
 
         {/* Form Section */}
-        <Box flex="1" px={{ base: "2" }} w={"full"}>
+        <Box flex="1" px={{ base: "2" }} w="full">
           <Heading
             as="h1"
-            color={"#bcf553"}
+            color="#86a157"
             size={{ base: "xl", md: "3xl" }}
             textAlign="center"
-            fontWeight={"bolder"}
+            fontWeight="bolder"
             mb={6}
           >
             Welcome! Please login.
@@ -114,11 +114,10 @@ const LoginPage = () => {
               size="md"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              onKeyDown={handleKeyDown} // Handle Enter key
+              onKeyDown={handleKeyDown}
             />
 
-            {/* Password Field with show/hide */}
-            <Group w={"full"}>
+            <Group w="full">
               <Input
                 placeholder="Enter your password"
                 type={showPassword ? "text" : "password"}
@@ -126,7 +125,7 @@ const LoginPage = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={handleKeyDown} // Handle Enter key
+                onKeyDown={handleKeyDown}
               />
 
               <Button
@@ -140,14 +139,26 @@ const LoginPage = () => {
             </Group>
 
             <Button
-              bg={"#bcf553"}
+              bg="#86a157"
               _hover={{ bg: "#304552" }}
-              color={"white"}
+              color="white"
               width="full"
               onClick={handleLogin}
+              isLoading={loading}
             >
               Sign In
             </Button>
+
+            <Text
+              as={Link}
+              alignSelf="self-start"
+              to="/sign-up"
+              color="blue.500"
+              fontSize="sm"
+              fontWeight="bold"
+            >
+              Create account
+            </Text>
           </VStack>
         </Box>
       </Stack>
