@@ -100,7 +100,7 @@ const AddNewPost = () => {
                     onChange={(e) => setContent(e.target.value)}
                   />
                 </Field.Root>
-                <Text>Image </Text>
+                {/* <Text>Image </Text>
                 <Input
                   p={2}
                   type="file"
@@ -140,7 +140,7 @@ const AddNewPost = () => {
                       </Box>
                     ))}
                   </Stack>
-                )}
+                )} */}
               </Stack>
             </Dialog.Body>
             <Dialog.Footer>

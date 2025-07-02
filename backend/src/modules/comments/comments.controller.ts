@@ -37,10 +37,8 @@ export class CommentsController {
 
   @Post()
   async create(@Body() dto: AddCommentDto, @Request() req) {
-    // Inject authorId from JWT user
-    return this.commandBus.execute(
-      new AddCommentCommand({ ...dto, authorId: req.user.id }),
-    );
+    const authorId = String(req.user.id);
+    return this.commandBus.execute(new AddCommentCommand(dto, authorId));
   }
 
   @Get('post/:postId')

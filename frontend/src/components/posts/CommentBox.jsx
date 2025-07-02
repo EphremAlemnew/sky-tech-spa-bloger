@@ -1,8 +1,9 @@
 // components/CommentBox.jsx
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Button, HStack, Text } from "@chakra-ui/react";
+import { formatDistanceToNow } from "date-fns";
 
-const CommentBox = ({ author, content }) => {
+const CommentBox = ({ author, content, createdAt }) => {
   const ref = useRef(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -22,7 +23,15 @@ const CommentBox = ({ author, content }) => {
       border="1px solid"
       borderColor="gray.400"
     >
-      <Text fontWeight="bold">{author}</Text>
+      <HStack>
+        <Text fontWeight="bold">{author}</Text>
+        <Text fontSize="xs" color="gray.400">
+          {formatDistanceToNow(new Date(createdAt), {
+            addSuffix: true,
+          })}
+        </Text>
+      </HStack>
+
       <Box
         ref={ref}
         maxHeight={expanded ? "none" : "60px"}

@@ -8,6 +8,8 @@ import {
   Button,
   SimpleGrid,
   HStack,
+  Spacer,
+  Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -17,6 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "@/features/postsSlice";
 
 import { fetchCommentsByPostId } from "@/features/commentsSlice";
+import { LuOption } from "react-icons/lu";
+import { BiEdit, BiMenu, BiPen, BiPencil, BiTrash } from "react-icons/bi";
+import { FaEdit, FaPen } from "react-icons/fa";
 export default function PostsList() {
   const [expandedPostId, setExpandedPostId] = useState(null);
   const [visibleComments, setVisibleComments] = useState({});
@@ -31,7 +36,7 @@ export default function PostsList() {
     }
   }, [status, dispatch]);
 
-  if (status === "loading") return <p>Loading...</p>;
+  if (status === "loading") return <Spinner />;
   if (status === "failed") return <p>Error: {error}</p>;
   const toggleExpanded = (postId) => {
     setExpandedPostId((prev) => (prev === postId ? null : postId));
@@ -79,9 +84,21 @@ export default function PostsList() {
               flexDirection="column"
             >
               <VStack align="start" spacing={1} p={4}>
-                <Heading size="xl" color={"#86a157"}>
-                  {post.title}
-                </Heading>
+                <HStack w={"full"}>
+                  <Heading size="xl" color={"#86a157"}>
+                    {post.title}
+                  </Heading>
+                  <Spacer />
+                  <Box>
+                    <Button mr={"-5"} color={"blue.600"} variant={"plain"}>
+                      <BiPencil />
+                    </Button>
+                    <Button color={"red.500"} variant={"plain"}>
+                      <BiTrash />
+                    </Button>{" "}
+                  </Box>
+                </HStack>
+
                 <Badge colorScheme="blue" size={{ base: "md", md: "lg" }}>
                   By {post?.author?.name}
                 </Badge>
@@ -114,7 +131,7 @@ export default function PostsList() {
                   } duration-300 ease-in-out`}
                 >
                   <Text
-                    fontSize={{ base: "sm", md: "lg" }}
+                    fontSize={{ base: "sm", md: "md" }}
                     whiteSpace="pre-wrap"
                   >
                     {isExpanded ? post.content : preview}
@@ -153,8 +170,9 @@ export default function PostsList() {
                     {comments.map((c, i) => (
                       <CommentBox
                         key={i}
-                        author={c.author}
+                        author={c?.author?.name}
                         content={c.content}
+                        createdAt={c.createdAt}
                       />
                     ))}
                   </VStack>

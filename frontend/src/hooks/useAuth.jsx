@@ -13,8 +13,18 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUser({ id: decoded.userId, role: decoded.role });
+
+        const now = Date.now() / 1000; // Current time in seconds
+        if (decoded.exp && decoded.exp < now) {
+          // Token is expired
+          setUser(null);
+          Cookies.remove("token");
+        } else {
+          // Token is valid
+          setUser({ id: decoded.userId, role: decoded.role });
+        }
       } catch {
+        // If decoding fails, remove token
         setUser(null);
         Cookies.remove("token");
       }
@@ -23,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (token) => {
-    Cookies.set("token", token, { expires: 7 });
+    Cookies.set("token", token, { expires: 6 });
     const decoded = jwtDecode(token);
     setUser({ id: decoded.userId, role: decoded.role });
   };

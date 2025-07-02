@@ -9,10 +9,6 @@ export class AddCommentDto {
   @IsString()
   content: string;
 
-  @ApiProperty({ example: '1', description: 'ID of the comment author' })
-  @IsString()
-  authorId: string;
-
   @ApiProperty({
     example: '2',
     description: 'ID of the post being commented on',
