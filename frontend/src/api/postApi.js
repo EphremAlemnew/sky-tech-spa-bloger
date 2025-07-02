@@ -1,15 +1,34 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
-// Get token from cookies
-const getAuthHeaders = () => {
+export const getAuthHeaders = (isFormData = false) => {
   const token = Cookies.get("token");
   return {
     Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
   };
+};
+
+export const createPostWithImages = async ({ title, content, images = [] }) => {
+  const token = Cookies.get("token");
+  const formData = new FormData();
+
+  formData.append("title", title);
+  formData.append("content", content);
+
+  images.forEach((image) => {
+    formData.append("images", image); // must match field name in NestJS
+  });
+
+  try {
+    const res = await axios.post(`${API_URL}/posts`, formData, {
+      headers: getAuthHeaders(),
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Post creation error:", err);
+    throw err.response?.data || { message: "Upload failed" };
+  }
 };
 
 // Create a new post

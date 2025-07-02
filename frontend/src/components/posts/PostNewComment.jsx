@@ -2,58 +2,39 @@
 import { Box, Button, Input, Textarea, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { toaster } from "../ui/toaster";
+import { useDispatch } from "react-redux";
+import { addComment } from "@/features/commentsSlice";
 const PostNewComment = ({ postId, onCommentAdded }) => {
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleSubmit = async () => {
-    if (!author.trim() || !content.trim()) {
+    if (!content.trim()) {
       toaster.create({
-        title: "Missing fields",
-        description: "Please fill out all fields",
-        type: "error",
-        duration: 5000,
-        isClosable: true,
+        title: "Empty comment",
+        type: "warning",
+        duration: 3000,
       });
       return;
     }
 
-    setLoading(true);
-
     try {
-      // Simulate API call — replace with actual POST
-      const newComment = {
-        author,
-        content,
-      };
-
-      // TODO: Replace with Axios POST to backend
-      // await axios.post(`/api/comments`, { authorId, postId, content })
-
-      onCommentAdded?.(newComment); // Callback to update UI
-
-      // Reset form
-      setAuthor("");
+      await dispatch(addComment({ postId, content })).unwrap();
       setContent("");
-
       toaster.create({
         title: "Comment added",
-        description: "Your comment was successfully posted.",
-        status: "success",
+        type: "success",
         duration: 3000,
-        isClosable: true,
       });
     } catch (err) {
       toaster.create({
-        title: "Failed to add comment",
+        title: "Error adding comment",
         description: err.message || "Something went wrong",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+        type: "error",
       });
-    } finally {
-      setLoading(false);
     }
   };
 

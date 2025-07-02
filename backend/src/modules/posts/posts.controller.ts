@@ -9,8 +9,9 @@ import {
   UseGuards,
   Request,
   NotFoundException,
-  ForbiddenException,
   UnauthorizedException,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -21,10 +22,14 @@ import { UpdatePostDto } from './dto/update-post.dto';
 
 import { CreatePostCommand } from './application/commands/create-post.handler';
 import { UpdatePostCommand } from './application/commands/update-post.handler';
-
 import { DeletePostCommand } from './application/commands/delete-post.handler';
+
 import { GetPostsQuery } from './application/queries/get-posts.handler';
 import { GetPostByIdQuery } from './application/queries/get-post-by-id.handler';
+
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -36,15 +41,32 @@ export class PostsController {
     private queryBus: QueryBus,
   ) {}
 
+  // CREATE POST with optional images
   @Post()
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
-  async create(@Body() dto: CreatePostDto, @Request() req) {
-    const userId = req?.user?.id;
-    console.log(req.user);
-    if (!userId) {
-      throw new UnauthorizedException('User ID not found in token');
-    }
+  @UseInterceptors(
+    FilesInterceptor('images', 5, {
+      storage: diskStorage({
+        destination: './upload',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    }),
+  )
+  async create(
+    @Body() dto: CreatePostDto,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Request() req,
+  ) {
+    const userId = req.user.id;
+    // Map files to relative URLs
+    const imageUrls = files?.map((file) => `/upload/${file.filename}`) || [];
+    // Add imageUrls to dto or pass separately
+    dto.imageUrls = imageUrls.length > 0 ? imageUrls : undefined;
+
     return this.commandBus.execute(new CreatePostCommand(dto, userId));
   }
 
@@ -66,7 +88,6 @@ export class PostsController {
     @Body() dto: UpdatePostDto,
     @Request() req,
   ) {
-    // Pass userId for ownership check inside handler
     return this.commandBus.execute(new UpdatePostCommand(id, dto, req.user.id));
   }
 

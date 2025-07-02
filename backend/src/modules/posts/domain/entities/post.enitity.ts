@@ -16,6 +16,8 @@ export class Post {
 
   @Column('text')
   content: string;
+  @Column('text', { array: true, nullable: true })
+  imageUrls?: string[];
 
   @ManyToOne(() => User, (user) => user.id)
   author: User;

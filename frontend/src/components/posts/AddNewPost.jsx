@@ -1,22 +1,25 @@
 import {
+  Box,
   Button,
   Dialog,
   Field,
+  Image,
   Input,
   Portal,
   Stack,
+  Text,
   Textarea,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import axios from "axios";
 import { toaster } from "../ui/toaster";
-import { createPost } from "@/api/postApi";
+import { createPost, createPostWithImages } from "@/api/postApi";
 const AddNewPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [open, setOpen] = useState(false);
-
+  const [images, setImages] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const handleSubmit = async () => {
     if (!title.trim() || !content.trim()) {
       toaster.create({
@@ -29,9 +32,10 @@ const AddNewPost = () => {
     }
 
     try {
-      const res = await createPost({
-        title: title.trim(),
-        content: content.trim(),
+      const res = await await createPostWithImages({
+        title,
+        content,
+        images,
       });
 
       toaster.create({
@@ -96,6 +100,47 @@ const AddNewPost = () => {
                     onChange={(e) => setContent(e.target.value)}
                   />
                 </Field.Root>
+                <Text>Image </Text>
+                <Input
+                  p={2}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files);
+                    setImages((prev) => [...prev, ...files]);
+                  }}
+                />
+
+                {images.length > 0 && (
+                  <Stack direction="row" wrap="wrap" gap={2}>
+                    {images.map((img, i) => (
+                      <Box key={i} position="relative">
+                        <Image
+                          src={URL.createObjectURL(img)}
+                          alt={`preview-${i}`}
+                          boxSize="100px"
+                          objectFit="cover"
+                          borderRadius="md"
+                          border="1px solid #ccc"
+                        />
+                        <Button
+                          size="xs"
+                          colorScheme="red"
+                          position="absolute"
+                          top="0"
+                          right="0"
+                          borderRadius="full"
+                          onClick={() => {
+                            setImages(images.filter((_, idx) => idx !== i));
+                          }}
+                        >
+                          ×
+                        </Button>
+                      </Box>
+                    ))}
+                  </Stack>
+                )}
               </Stack>
             </Dialog.Body>
             <Dialog.Footer>

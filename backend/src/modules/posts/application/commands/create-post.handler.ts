@@ -7,6 +7,7 @@ export class CreatePostCommand implements ICommand {
   constructor(
     public readonly dto: CreatePostDto,
     public readonly authorId: number,
+    public readonly imageUrls: string[] = [],
   ) {}
 }
 
@@ -15,7 +16,7 @@ export class CreatePostHandler implements ICommandHandler<CreatePostCommand> {
   constructor(private repo: PostsRepository) {}
 
   async execute(command: CreatePostCommand) {
-    const { title, content } = command.dto;
+    const { title, content, imageUrls } = command.dto;
 
     const author = new User();
     author.id = command.authorId;
@@ -24,6 +25,7 @@ export class CreatePostHandler implements ICommandHandler<CreatePostCommand> {
       title,
       content,
       author,
+      imageUrls,
     });
   }
 }
