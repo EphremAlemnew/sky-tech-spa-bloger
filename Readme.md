@@ -79,16 +79,20 @@ VITE_PORT=3000
 
 ---
 
-| Method | Endpoint         | Description                    | Authentication |
-| ------ | ---------------- | ------------------------------ | -------------- |
-| POST   | `/auth/register` | Register a new user            | No             |
-| POST   | `/auth/login`    | Login and receive JWT token    | No             |
-| GET    | `/auth/me`       | Get current authenticated user | Bearer Token   |
-| POST   | `/posts`         | Create a new post              | Bearer Token   |
-| GET    | `/posts`         | Get list of all posts          | Bearer Token   |
-| GET    | `/posts/:id`     | Get post by ID                 | Bearer Token   |
-| PUT    | `/posts/:id`     | Update post by ID              | Bearer Token   |
-| DELETE | `/posts/:id`     | Delete post by ID              | Bearer Token   |
+| Method | Endpoint                 | Description                    | Authentication |
+| ------ | ------------------------ | ------------------------------ | -------------- |
+| POST   | `/auth/register`         | Register a new user            | No             |
+| POST   | `/auth/login`            | Login and receive JWT token    | No             |
+| GET    | `/auth/me`               | Get current authenticated user | Bearer Token   |
+| POST   | `/posts`                 | Create a new post              | Bearer Token   |
+| GET    | `/posts`                 | Get list of all posts          | Bearer Token   |
+| GET    | `/posts/:id`             | Get post by ID                 | Bearer Token   |
+| PUT    | `/posts/:id`             | Update post by ID              | Bearer Token   |
+| DELETE | `/posts/:id`             | Delete post by ID              | Bearer Token   |
+| POST   | `/comments`              | Create a new comment           | Bearer Token   |
+| GET    | `/comments/post/:postId` | Get all comments for a post    | Bearer Token   |
+| DELETE | `/comments/:id`          | Delete comment by ID           | Bearer Token   |
+
 
 ## Swagger API Documentation
 
