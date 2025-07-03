@@ -40,7 +40,7 @@ const AddNewPost = () => {
         content,
         images,
       });
-      dispatch(fetchPosts);
+      dispatch(fetchPosts());
       toaster.create({
         title: "Post created successfully",
         type: "success",
