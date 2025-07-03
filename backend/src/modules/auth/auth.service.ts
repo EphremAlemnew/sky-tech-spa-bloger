@@ -25,4 +25,12 @@ export class AuthService {
     const token = this.jwt.sign({ userId: user.id, role: user.role });
     return { access_token: token };
   }
+  async getMe(userId: number) {
+    const user = await this.userService.findById(userId);
+    if (!user) throw new UnauthorizedException('User not found');
+
+    // Optional: remove password before returning
+    const { password, ...rest } = user;
+    return rest;
+  }
 }

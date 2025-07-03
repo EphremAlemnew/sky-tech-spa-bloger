@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const API_AUTH_URL = import.meta.env.VITE_API_URL;
 
@@ -21,10 +22,18 @@ export const login = async (email, password) => {
 };
 
 export const getMe = async () => {
+  const token = Cookies.get("token"); // Or however you store the JWT
+  if (!token) throw new Error("No token found");
+
   try {
-    const response = await axiosInstance.get("/me");
+    const response = await axiosInstance.get("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (err) {
+    console.log(err);
     throw new Error("Not authenticated");
   }
 };

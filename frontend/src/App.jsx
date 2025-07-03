@@ -8,6 +8,7 @@ import { Toaster } from "./components/ui/toaster";
 import ErrorPage from "./components/common/ErrorPage";
 import SignUpPage from "./components/auth/SignUpPage";
 import ProtectedRoute from "./router/ProtectedRoute";
+import UpdatePost from "./components/posts/UpdatePost";
 function App() {
   return (
     <>
@@ -22,6 +23,14 @@ function App() {
             element={
               <HomeLayout>
                 <Home />
+              </HomeLayout>
+            }
+          />
+          <Route
+            path="/update-post"
+            element={
+              <HomeLayout>
+                <UpdatePost />
               </HomeLayout>
             }
           />

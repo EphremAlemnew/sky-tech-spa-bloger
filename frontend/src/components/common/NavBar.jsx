@@ -8,7 +8,7 @@ import {
   Text,
   Link,
 } from "@chakra-ui/react";
-
+import { useDispatch, useSelector } from "react-redux";
 import { useColorMode } from "../ui/color-mode";
 import { BiMenu, BiX, BiLogoDrupal, BiMoon, BiSun } from "react-icons/bi";
 import {
@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/drawer";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { fetchMe } from "@/features/authSlice";
+import { useEffect } from "react";
 const NavBbar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onToggle } = useDisclosure();
@@ -31,11 +33,18 @@ const NavBbar = () => {
   const textColor = colorMode === "light" ? "gray.800" : "white";
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
+
+  useEffect(() => {
+    dispatch(fetchMe());
+  }, [dispatch]);
+
   return (
     <HStack
       px={4}
@@ -56,6 +65,9 @@ const NavBbar = () => {
         </Text>
         <Text fontSize="2xl" color={"#86a157"} fontWeight={"lighter"}>
           Blogger
+        </Text>
+        <Text fontSize="2xl" color={"#86a157"} fontWeight={"lighter"}>
+          {user?.name}
         </Text>
       </Link>
       <Spacer />

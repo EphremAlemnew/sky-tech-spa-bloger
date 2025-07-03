@@ -22,6 +22,8 @@ import { fetchCommentsByPostId } from "@/features/commentsSlice";
 import { LuOption } from "react-icons/lu";
 import { BiEdit, BiMenu, BiPen, BiPencil, BiTrash } from "react-icons/bi";
 import { FaEdit, FaPen } from "react-icons/fa";
+import DeletePost from "./DeletePost";
+import { useNavigate } from "react-router-dom";
 export default function PostsList() {
   const [expandedPostId, setExpandedPostId] = useState(null);
   const [visibleComments, setVisibleComments] = useState({});
@@ -29,6 +31,8 @@ export default function PostsList() {
   const dispatch = useDispatch();
   const { posts, status, error } = useSelector((state) => state.posts);
   const allComments = useSelector((state) => state.comments.byPostId);
+  const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (status === "idle") {
@@ -59,7 +63,9 @@ export default function PostsList() {
       [`${postId}-${commentIndex}`]: !prev[`${postId}-${commentIndex}`],
     }));
   };
-
+  const handleUpdate = (postId) => {
+    navigate(`/update-post?id=${postId}`);
+  };
   return (
     <SimpleGrid columns={{ base: 1 }} spaceY={6} w="full">
       {[...posts]
@@ -89,18 +95,26 @@ export default function PostsList() {
                     {post.title}
                   </Heading>
                   <Spacer />
-                  <Box>
-                    <Button mr={"-5"} color={"blue.600"} variant={"plain"}>
-                      <BiPencil />
-                    </Button>
-                    <Button color={"red.500"} variant={"plain"}>
-                      <BiTrash />
-                    </Button>{" "}
-                  </Box>
+                  {post?.author?.id === user?.id && (
+                    <Box>
+                      <Button
+                        onClick={() => handleUpdate(post.id)}
+                        mr={"-5"}
+                        color={"blue.600"}
+                        variant={"plain"}
+                      >
+                        <BiPencil />
+                      </Button>
+
+                      <DeletePost post={post} />
+                    </Box>
+                  )}
                 </HStack>
 
                 <Badge colorScheme="blue" size={{ base: "md", md: "lg" }}>
-                  By {post?.author?.name}
+                  {post?.author?.name === user?.name
+                    ? "Your post"
+                    : "By " + post?.author?.name}
                 </Badge>
                 <Text fontSize="sm" color="gray.400">
                   {formatDistanceToNow(new Date(post.createdAt), {
@@ -167,14 +181,18 @@ export default function PostsList() {
                 {showComments && (
                   <VStack align="start" w="full" spacing={2} pt={2}>
                     <PostNewComment postId={post.id} />
-                    {comments.map((c, i) => (
-                      <CommentBox
-                        key={i}
-                        author={c?.author?.name}
-                        content={c.content}
-                        createdAt={c.createdAt}
-                      />
-                    ))}
+                    {[...comments]
+                      .sort(
+                        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                      )
+                      .map((c, i) => (
+                        <CommentBox
+                          key={i}
+                          author={c?.author?.name}
+                          content={c.content}
+                          createdAt={c.createdAt}
+                        />
+                      ))}
                   </VStack>
                 )}
               </VStack>

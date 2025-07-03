@@ -55,3 +55,23 @@ export const fetchPosts = async () => {
   });
   return response.data;
 };
+
+export const deletePost = async (id) => {
+  try {
+    const token = Cookies.get("token");
+
+    const response = await axios({
+      method: "delete",
+      url: `${API_URL}/posts/${id}/`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "*/*", // optional
+      },
+    });
+
+    return response.status;
+  } catch (error) {
+    console.error("Delete failed:", error.response?.data || error.message);
+    throw error;
+  }
+};
