@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: blog-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=qwjyienmpoieopmionndsjkh
+      - JWT_EXPIRES_IN=6h
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=blog
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://backend:5000
+    container_name: blog-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:15
+    container_name: blog-db
+    restart: always
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:

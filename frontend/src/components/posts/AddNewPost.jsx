@@ -15,11 +15,14 @@ import { FiPlus } from "react-icons/fi";
 import axios from "axios";
 import { toaster } from "../ui/toaster";
 import { createPost, createPostWithImages } from "@/api/postApi";
+import { useDispatch } from "react-redux";
+import { fetchPosts } from "@/features/postsSlice";
 const AddNewPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const dispatch = useDispatch();
   const handleSubmit = async () => {
     if (!title.trim() || !content.trim()) {
       toaster.create({
@@ -37,7 +40,7 @@ const AddNewPost = () => {
         content,
         images,
       });
-
+      dispatch(fetchPosts);
       toaster.create({
         title: "Post created successfully",
         type: "success",

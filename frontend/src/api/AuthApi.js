@@ -23,6 +23,7 @@ export const login = async (email, password) => {
 
 export const getMe = async () => {
   const token = Cookies.get("token"); // Or however you store the JWT
+
   if (!token) throw new Error("No token found");
 
   try {

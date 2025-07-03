@@ -13,11 +13,20 @@ export class PostsRepository {
     return this.repo.save(post);
   }
 
-  findAll() {
-    return this.repo.find({ relations: ['author'] });
+  async findAll() {
+    const posts = await this.repo.find({ relations: ['author'] });
+
+    return posts.map((post) => ({
+      ...post,
+      author: {
+        id: post.author.id,
+        name: post.author.name,
+        email: post.author.email,
+      },
+    }));
   }
 
-  findById(id: number) {
+  async findById(id: number) {
     return this.repo.findOne({ where: { id }, relations: ['author'] });
   }
 

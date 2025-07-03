@@ -1,5 +1,4 @@
 import NavBar from "@/components/common/NavBar";
-import Sidebar from "@/components/common/SideBar";
 import { useColorMode } from "@/components/ui/color-mode";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 
@@ -7,7 +6,7 @@ import React from "react";
 
 const HomeLayout = ({ children }) => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { isOpen, onToggle } = useDisclosure();
+
   const bg = colorMode === "light" ? "white" : "#282828";
   return (
     <Flex w="full" minH="100vh" bg={bg}>

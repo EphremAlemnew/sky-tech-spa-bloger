@@ -82,7 +82,8 @@ export default function PostsList() {
               key={post.id}
               borderWidth="1px"
               borderRadius="lg"
-              overflow="hidden"
+              overflowY={"scroll"}
+              h={"auto"}
               boxShadow="md"
               _hover={{ boxShadow: "lg", transform: "translateY(-2px)" }}
               transition="all 0.2s ease-in-out"
@@ -141,7 +142,7 @@ export default function PostsList() {
               <VStack align="start" spacing={3} p={4} className="flex-grow">
                 <div
                   className={`transition-shadow overflow-hidden ${
-                    isExpanded ? "max-h-[500px]" : "max-h-[100px]"
+                    isExpanded ? "" : "max-h-[100px]"
                   } duration-300 ease-in-out`}
                 >
                   <Text
