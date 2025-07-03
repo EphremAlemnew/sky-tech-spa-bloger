@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import { config as configDotenv } from "dotenv";
 
-configDotenv(); // Load .env
+configDotenv();
 
 export default defineConfig({
   build: {

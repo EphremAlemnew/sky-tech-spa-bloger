@@ -17,7 +17,7 @@ export const createPostWithImages = async ({ title, content, images = [] }) => {
   formData.append("content", content);
 
   images.forEach((image) => {
-    formData.append("images", image); // must match field name in NestJS
+    formData.append("images", image);
   });
 
   try {
@@ -31,7 +31,6 @@ export const createPostWithImages = async ({ title, content, images = [] }) => {
   }
 };
 
-// Create a new post
 export const createPost = async ({ title, content }) => {
   try {
     const response = await axios.post(
@@ -48,7 +47,6 @@ export const createPost = async ({ title, content }) => {
   }
 };
 
-// Get all posts (optional helper)
 export const fetchPosts = async () => {
   const response = await axios.get(`${API_URL}/posts`, {
     headers: getAuthHeaders(),
@@ -65,7 +63,7 @@ export const deletePost = async (id) => {
       url: `${API_URL}/posts/${id}/`,
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "*/*", // optional
+        Accept: "*/*",
       },
     });
 

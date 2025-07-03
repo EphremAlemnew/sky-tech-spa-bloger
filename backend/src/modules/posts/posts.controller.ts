@@ -41,7 +41,6 @@ export class PostsController {
     private queryBus: QueryBus,
   ) {}
 
-  // CREATE POST with optional images
   @Post()
   @UseInterceptors(
     FilesInterceptor('images', 5, {
@@ -62,9 +61,9 @@ export class PostsController {
     @Request() req,
   ) {
     const userId = req.user.id;
-    // Map files to relative URLs
+
     const imageUrls = files?.map((file) => `/upload/${file.filename}`) || [];
-    // Add imageUrls to dto or pass separately
+
     dto.imageUrls = imageUrls.length > 0 ? imageUrls : undefined;
 
     return this.commandBus.execute(new CreatePostCommand(dto, userId));

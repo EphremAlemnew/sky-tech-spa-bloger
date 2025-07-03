@@ -1,6 +1,5 @@
-// features/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getMe } from "@/api/AuthApi"; // adjust path
+import { getMe } from "@/api/AuthApi";
 
 export const fetchMe = createAsyncThunk("auth/me", async (_, thunkAPI) => {
   try {
@@ -16,7 +15,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
-    status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+    status: "idle",
     error: null,
   },
   reducers: {

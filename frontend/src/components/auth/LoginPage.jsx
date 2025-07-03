@@ -22,7 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 const LoginPage = () => {
   const { colorMode } = useColorMode();
-  const { login: loginUser } = useAuth(); // from your useAuth hook
+  const { login: loginUser } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -45,12 +45,12 @@ const LoginPage = () => {
     try {
       setLoading(true);
       const data = await login(email, password);
-      await loginUser(data.access_token); // Store token in cookie & update user
+      await loginUser(data.access_token);
       toaster.create({
         title: `Login successful`,
         type: "success",
       });
-      navigate("/"); // Go to home/dashboard
+      navigate("/");
     } catch (err) {
       toaster.create({
         title: err.message || `Invalid credentials`,

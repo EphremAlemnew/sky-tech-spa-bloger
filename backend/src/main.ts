@@ -13,7 +13,6 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 5000;
 
-  // Read username & password from env with defaults
   const basicAuthUser = configService.get<string>('BASIC_AUTH_USER') || 'admin';
   const basicAuthPassword =
     configService.get<string>('BASIC_AUTH_PASSWORD') || 'password123';

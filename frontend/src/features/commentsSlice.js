@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-// Auth header
 const getAuthHeaders = () => {
   const token = Cookies.get("token");
   return {
@@ -12,7 +11,6 @@ const getAuthHeaders = () => {
   };
 };
 
-// Thunk to fetch comments for a specific post
 export const fetchCommentsByPostId = createAsyncThunk(
   "comments/fetchByPostId",
   async (postId, thunkAPI) => {
@@ -29,7 +27,6 @@ export const fetchCommentsByPostId = createAsyncThunk(
   }
 );
 
-// Thunk to add a new comment
 export const addComment = createAsyncThunk(
   "comments/addComment",
   async ({ postId, content }, thunkAPI) => {
@@ -52,7 +49,7 @@ export const addComment = createAsyncThunk(
 const commentsSlice = createSlice({
   name: "comments",
   initialState: {
-    byPostId: {}, // { postId: [comments] }
+    byPostId: {},
     status: "idle",
     error: null,
   },

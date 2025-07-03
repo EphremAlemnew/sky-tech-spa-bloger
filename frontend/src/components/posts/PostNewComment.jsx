@@ -1,4 +1,3 @@
-// components/PostNewComment.jsx
 import { Box, Button, Input, Textarea, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { toaster } from "../ui/toaster";

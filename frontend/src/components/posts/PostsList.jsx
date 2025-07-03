@@ -67,7 +67,7 @@ export default function PostsList() {
     }));
 
     if (!visibleComments[postId]) {
-      dispatch(fetchCommentsByPostId(postId)); // Load only when first opened
+      dispatch(fetchCommentsByPostId(postId));
     }
   };
 

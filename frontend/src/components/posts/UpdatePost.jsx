@@ -15,7 +15,7 @@ import Cookies from "js-cookie";
 import { toaster } from "../ui/toaster";
 import { useDispatch } from "react-redux";
 import { fetchPosts } from "@/features/postsSlice";
-const API_URL = "http://localhost:5000"; // adjust to your backend
+const API_URL = "http://localhost:5000";
 
 const UpdatePost = () => {
   const [searchParams] = useSearchParams();
@@ -27,7 +27,6 @@ const UpdatePost = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Fetch post details
   useEffect(() => {
     const token = Cookies.get("token");
 
@@ -73,7 +72,7 @@ const UpdatePost = () => {
         isClosable: true,
       });
 
-      navigate("/"); // redirect after update
+      navigate("/");
     } catch (err) {
       console.error("Update failed:", err);
       toaster.create({

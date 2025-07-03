@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth"; // adjust the path as needed
+import { useAuth } from "@/hooks/useAuth";
 import { Spinner, Center } from "@chakra-ui/react";
 
 const ProtectedRoute = () => {

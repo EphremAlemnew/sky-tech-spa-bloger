@@ -12,7 +12,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 import { BiLogOut } from "react-icons/bi";
 
-import { useAuth } from "@/hooks/useAuth"; // ✅ use the already initialized one
+import { useAuth } from "@/hooks/useAuth";
 
 export const AvatarContent = ({ user }) => {
   const { logout } = useAuth();

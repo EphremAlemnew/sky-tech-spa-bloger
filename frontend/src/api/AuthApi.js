@@ -5,7 +5,7 @@ const API_AUTH_URL = import.meta.env.VITE_API_URL;
 
 const axiosInstance = axios.create({
   baseURL: API_AUTH_URL,
-  withCredentials: true, // 👈 Required to send/receive cookies
+  withCredentials: true,
 });
 
 export const login = async (email, password) => {
@@ -22,7 +22,7 @@ export const login = async (email, password) => {
 };
 
 export const getMe = async () => {
-  const token = Cookies.get("token"); // Or however you store the JWT
+  const token = Cookies.get("token");
 
   if (!token) throw new Error("No token found");
 

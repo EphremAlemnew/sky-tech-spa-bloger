@@ -29,7 +29,6 @@ export class AuthService {
     const user = await this.userService.findById(userId);
     if (!user) throw new UnauthorizedException('User not found');
 
-    // Optional: remove password before returning
     const { password, ...rest } = user;
     return rest;
   }

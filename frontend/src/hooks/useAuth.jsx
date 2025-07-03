@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext, createContext } from "react";
 import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode"; // note: import default, no {}
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // NEW loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const decoded = jwtDecode(token);
 
-        const now = Date.now() / 1000; // Current time in seconds
+        const now = Date.now() / 1000;
         if (decoded.exp && decoded.exp < now) {
           // Token is expired
           setUser(null);
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         Cookies.remove("token");
       }
     }
-    setLoading(false); // loading finished
+    setLoading(false);
   }, []);
 
   const login = (token) => {

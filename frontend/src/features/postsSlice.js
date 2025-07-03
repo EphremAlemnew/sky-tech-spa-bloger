@@ -1,17 +1,15 @@
-// src/store/postsSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { getAuthHeaders } from "@/api/postApi";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-// Async thunk for fetching posts
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   const token = Cookies.get("token");
   const response = await axios.get(`${API_URL}/posts`, {
     headers: getAuthHeaders(),
   });
-  return response.data; // assuming backend returns array of posts
+  return response.data;
 });
 
 const postsSlice = createSlice({

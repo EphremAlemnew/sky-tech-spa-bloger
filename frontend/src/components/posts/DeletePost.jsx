@@ -35,7 +35,6 @@ const DeletePost = ({ post }) => {
         type: "success",
       });
 
-      // Call the onActionSuccess callback to refresh users data
       dispatch(fetchPosts());
     } catch (error) {
       toaster.create({

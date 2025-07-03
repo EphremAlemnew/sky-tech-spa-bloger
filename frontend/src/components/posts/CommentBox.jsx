@@ -1,4 +1,3 @@
-// components/CommentBox.jsx
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, HStack, Text } from "@chakra-ui/react";
 import { formatDistanceToNow } from "date-fns";
