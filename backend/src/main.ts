@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
+import * as basicAuth from 'express-basic-auth';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -12,7 +13,22 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 5000;
 
+  // Read username & password from env with defaults
+  const basicAuthUser = configService.get<string>('BASIC_AUTH_USER') || 'admin';
+  const basicAuthPassword =
+    configService.get<string>('BASIC_AUTH_PASSWORD') || 'password123';
+
   app.useGlobalPipes(new ValidationPipe());
+
+  app.use(
+    ['/api'],
+    basicAuth({
+      challenge: true,
+      users: {
+        [basicAuthUser]: basicAuthPassword,
+      },
+    }),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Blog System')
@@ -25,11 +41,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors({
-    origin: [
-      'http://localhost:4000',
-      'http://192.168.137.198:4000',
-      'https://yourdomain.com',
-    ],
+    origin: ['http://localhost:4000', 'http://192.168.137.198:4000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });

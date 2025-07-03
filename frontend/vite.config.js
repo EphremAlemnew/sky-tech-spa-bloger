@@ -7,6 +7,9 @@ import { config as configDotenv } from "dotenv";
 configDotenv(); // Load .env
 
 export default defineConfig({
+  build: {
+    outDir: "dist",
+  },
   plugins: [react(), tsconfigPaths(), tailwindcss()],
   server: {
     host: "0.0.0.0",

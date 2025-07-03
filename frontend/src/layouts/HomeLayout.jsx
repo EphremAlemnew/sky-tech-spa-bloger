@@ -12,7 +12,7 @@ const HomeLayout = ({ children }) => {
     <Flex w="full" minH="100vh" bg={bg}>
       <Box flex="1" w="full" py={"8"}>
         <NavBar />
-        <Box my="16" mt="24" mx={{ base: "3", lg: "72" }}>
+        <Box my="16" mt="18" mx={{ base: "3", lg: "72" }}>
           {children}
         </Box>
       </Box>

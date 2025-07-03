@@ -84,7 +84,9 @@ const UpdatePost = () => {
       });
     }
   };
-
+  const handleCancel = () => {
+    navigate("/");
+  };
   if (loading) {
     return (
       <Box mt={40} textAlign="center">
@@ -111,12 +113,7 @@ const UpdatePost = () => {
           onChange={(e) => setContent(e.target.value)}
         />
         <HStack alignSelf={"end"}>
-          <Button
-            alignSelf={"end"}
-            colorScheme="teal"
-            onClick={handleUpdate}
-            isDisabled={!title.trim() || !content.trim()}
-          >
+          <Button alignSelf={"end"} colorScheme="teal" onClick={handleCancel}>
             Cancel
           </Button>
           <Button

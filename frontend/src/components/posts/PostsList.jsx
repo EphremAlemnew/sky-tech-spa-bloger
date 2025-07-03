@@ -10,8 +10,10 @@ import {
   HStack,
   Spacer,
   Spinner,
+  InputGroup,
+  Input,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import CommentBox from "./CommentBox";
 import PostNewComment from "./PostNewComment";
@@ -19,15 +21,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "@/features/postsSlice";
 
 import { fetchCommentsByPostId } from "@/features/commentsSlice";
-import { LuOption } from "react-icons/lu";
-import { BiEdit, BiMenu, BiPen, BiPencil, BiTrash } from "react-icons/bi";
-import { FaEdit, FaPen } from "react-icons/fa";
+import { BiPencil, BiSearch } from "react-icons/bi";
+
 import DeletePost from "./DeletePost";
 import { useNavigate } from "react-router-dom";
 export default function PostsList() {
   const [expandedPostId, setExpandedPostId] = useState(null);
   const [visibleComments, setVisibleComments] = useState({});
-  const [expandedComments, setExpandedComments] = useState({}); // new
+  const [searchTerm, setSearchTerm] = useState("");
+
   const dispatch = useDispatch();
   const { posts, status, error } = useSelector((state) => state.posts);
   const allComments = useSelector((state) => state.comments.byPostId);
@@ -57,18 +59,27 @@ export default function PostsList() {
     }
   };
 
-  const toggleCommentExpand = (postId, commentIndex) => {
-    setExpandedComments((prev) => ({
-      ...prev,
-      [`${postId}-${commentIndex}`]: !prev[`${postId}-${commentIndex}`],
-    }));
-  };
   const handleUpdate = (postId) => {
     navigate(`/update-post?id=${postId}`);
   };
   return (
     <SimpleGrid columns={{ base: 1 }} spaceY={6} w="full">
+      <HStack w={{ base: "full", md: "1/2" }} align={"end"}>
+        <InputGroup startElement={<BiSearch />}>
+          <Input
+            placeholder="Search here..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </InputGroup>
+      </HStack>
       {[...posts]
+        .filter(
+          (post) =>
+            post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            post?.author?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .map((post) => {
           const isExpanded = expandedPostId === post.id;
@@ -82,7 +93,6 @@ export default function PostsList() {
               key={post.id}
               borderWidth="1px"
               borderRadius="lg"
-              overflowY={"scroll"}
               h={"auto"}
               boxShadow="md"
               _hover={{ boxShadow: "lg", transform: "translateY(-2px)" }}
