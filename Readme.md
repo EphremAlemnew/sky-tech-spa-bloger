@@ -1,4 +1,4 @@
-# 📚 Full-Stack Blog System
+# Full-Stack Blog System
 
 A fully Dockerized blog platform with:
 
@@ -8,27 +8,27 @@ A fully Dockerized blog platform with:
 
 ---
 
-## ✨ Features
+##  Features
 
 ### Frontend
 
-- ✨ Vite + React + Chakra UI
-- 🔑 JWT login & register
-- 📄 Create, read, update, delete posts
-- 💬 Comment on posts
-- 🔍 Search bar (client-side filtering)
-- 📱 Responsive design
+-  Vite + React + Chakra UI
+-  JWT login & register
+-  Create, read, update, delete posts
+-  Comment on posts
+-  Search bar (client-side filtering)
+-  Responsive design
 
 ### Backend
 
-- ✨ NestJS (modular)
-- 🔑 JWT Auth with Passport
-- 🔄 CQRS pattern with Commands & Queries
-- 🔍 TypeORM PostgreSQL integration
+-  NestJS (modular)
+-  JWT Auth with Passport
+-  CQRS pattern with Commands & Queries
+-  TypeORM PostgreSQL integration
 
 ---
 
-## ⚙️ Project Structure
+## ⚙ Project Structure
 
 ```
 SKY_Tech_Exam/
@@ -42,7 +42,6 @@ SKY_Tech_Exam/
 │   ├── nginx.conf
 │   └── .env
 ├── docker-compose.yml
-└── .dockerignore
 ```
 
 ---
@@ -53,7 +52,7 @@ SKY_Tech_Exam/
 
 ```bash
 git clone <repo-url>
-cd SKY_Tech_Exam
+cd sky-tech-spa-bloger
 ```
 
 ### 2. Create environment files
@@ -78,7 +77,64 @@ VITE_PORT=3000
 ```
 
 ---
+### 3. backend
 
+```bash
+$ cd backend
+$ npm install
+
+```
+
+## Compile and run the project
+
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
+```
+
+## Run tests
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```
+### 4. frontend
+```bash
+$ cd frontend
+$ npm install
+
+```
+
+## Compile and run the project
+```bash
+# development
+$ npm run dev
+
+# build
+$ npm run build
+```
+
+## Swagger API Documentation
+
+Interactive API documentation is available at:http://localhost:<PORT>/api
+Note: The Swagger UI is protected with Basic Auth. Use credentials defined in your .env file:
+
+Username: BASIC_AUTH_USER
+Password: BASIC_AUTH_PASSWORD
+
+#api endpoints
 | Method | Endpoint                 | Description                    | Authentication |
 | ------ | ------------------------ | ------------------------------ | -------------- |
 | POST   | `/auth/register`         | Register a new user            | No             |
@@ -92,17 +148,7 @@ VITE_PORT=3000
 | POST   | `/comments`              | Create a new comment           | Bearer Token   |
 | GET    | `/comments/post/:postId` | Get all comments for a post    | Bearer Token   |
 | DELETE | `/comments/:id`          | Delete comment by ID           | Bearer Token   |
-
-
-## Swagger API Documentation
-
-Interactive API documentation is available at:http://localhost:<PORT>/api
-Note: The Swagger UI is protected with Basic Auth. Use credentials defined in your .env file:
-
-Username: BASIC_AUTH_USER
-Password: BASIC_AUTH_PASSWORD
-
-## 📅 Docker Setup
+## Docker Setup
 
 ### 1. docker-compose.yml
 
@@ -184,14 +230,14 @@ docker-compose up --build
 
 ---
 
-## 🌐 Access
+## Access
 
 - Frontend: [http://localhost:3000](http://localhost:3000)
 - Backend API: [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## ⚡ Common Issues
+## Common Issues
 
 | Issue                       | Fix                                                          |
 | --------------------------- | ------------------------------------------------------------ |
