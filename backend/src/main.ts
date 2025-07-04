@@ -6,7 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ConfigService } from '@nestjs/config';
 import * as basicAuth from 'express-basic-auth';
-
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -48,7 +48,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
   });
-
+  app.useGlobalInterceptors(new LoggingInterceptor());
   await app.listen(port);
   console.log(`Server is running on http://localhost:${port}`);
 }
